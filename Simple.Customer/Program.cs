@@ -8,7 +8,7 @@ using Marten;
 
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
+var connectionString = builder.Configuration["ConnectionStrings.PostgresConnection"];
 builder.Services.AddControllers();
 builder.Services.AddSingleton<IDocumentStore>(DocumentStore.For(storeOptions =>
 {
@@ -22,6 +22,7 @@ builder.Services.AddSingleton<IDocumentStore>(DocumentStore.For(storeOptions =>
                 .ConnectionLimit(-1)
         );
 }));
+
 builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Customer API", Version = "v1" });
@@ -36,7 +37,7 @@ app.UseSwaggerUI(c =>      //Swagger UI should be served from static container n
 
 app.UseAuthorization();
 //with attribute app.MapGet("/", [Authorize] (DbContext db) => db.Todos.ToListAsync();
-app.MapGet("/HealthCheck", () => return Results.Ok(); );
+app.MapGet("/HealthCheck", () => Results.Ok() );
 
 
 app.Run();
